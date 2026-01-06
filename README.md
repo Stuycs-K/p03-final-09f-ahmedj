@@ -1,19 +1,22 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/QfAIDTGi)
-# PROJECT NAME HERE (CHANGE THIS!!!!!)
- 
-### GROUP NAME HERE (CHANGE THIS!!!!!)
+# PLACEHOLDER NAME
 
-Group Members Here (CHANGE THIS!!!!!)
-       
+### The Second Smite of Samuel Konstantinovich
+
+Jidan Ahmed
+
 ### Project Description:
 
-Explain what is this project. (CHANGE THIS!!!!!)
-  
+This is a multiplayer game where players exist on the same map and can see each other's locations.
+
 ### Instructions:
 
-How does the user install/compile/run the program. (CHANGE THIS!!!!!)
-How does the user interact with this program? (CHANGE THIS!!!!!)
+Host player does make server with the argument being the map file. (If not specified, a default map will be used.)
+
+Guest player does make client with the argument being the host's IP. (If not specified, a default IP will be used.)
+
+Move with WASD
 
 ### Resources/ References:
 
-list here(CHANGE THIS!!!!!)
+none yet.
