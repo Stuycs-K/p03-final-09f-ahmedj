@@ -9,3 +9,6 @@ Decided on project idea during class and thought about proposal.
 
 ### 2026-01-06 - Proposal
 Finished writing proposal and started devlog.
+
+### 2026-01-07 - Proposal
+Added networking between server and client.
