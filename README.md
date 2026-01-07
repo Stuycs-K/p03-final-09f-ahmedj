@@ -10,12 +10,13 @@ Jidan Ahmed
 This is a multiplayer game where players exist on the same map and can see each other's locations.
 
 ### Instructions:
+Both players compile with make or make compile
 
-Host player does make server with the argument being the map file. (If not specified, a default map will be used.)
+Host player runs ./server with the argument being the map file. (If not specified, a default map will be used.)
 
-Guest player does make client with the argument being the host's IP. (If not specified, a default IP will be used.)
+Guest player runs ./client with the argument being the host's IP. (If not specified, a default IP will be used.)
 
-Move with WASD
+Move with WASD.
 
 ### Resources/ References:
 

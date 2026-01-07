@@ -28,9 +28,10 @@ I may use ncurses or try to manipulate the terminal manually.
 I will be breaking up the project into file reading, terminal manipulation and controls, networking then optional features
 
 # Intended pacing:
-1/6/26 - Create map system and server program
-1/8/26 - See game in terminal
-1/10/26 - Control player
-1/12/26 - Set up socket and client program
+1/6/26 - Set up socket and client program
+1/8/26 - Create map system and server program
+1/10/26 - See game in terminal
+1/12/26 - Control players
 1/14/26 - Optional features
 1/16/26 - Finishing touches
+
