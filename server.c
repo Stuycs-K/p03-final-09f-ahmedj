@@ -6,10 +6,7 @@ void getMap(char * path, char map[][] *) {
   FILE * mapFD = fopen(path, "r");
   fgets(buff, sizeof(buff); mapFD)
 
-  // get width and height of map, create 2d char array
-  int w,h;
-  sscanf(buff, "%d %d", w, h);
-  char mapArray[w][h];
+  char mapArray[10][10];
 
   // fill 2d char array
 
