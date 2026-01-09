@@ -1,17 +1,22 @@
 #include "networking.h"
 
-char[][]* createMapArray() {
-  char[][]* p;
-  p = calloc(0, 100)
-  return
-}
-char map[10][11] = ;
+char map[20][20] = {
+  {"##########"},
+  {"#        #"},
+  {"#        #"},
+  {"#  #     #"},
+  {"#  #     #"},
+  {"#  ###   #"},
+  {"#    #   #"},
+  {"#    #   #"},
+  {"#        #"},
+  {"##########"}
+};
 
 void setMap(char * path) {
   // read mapPath into array
   FILE * mapFD = fopen(path, "r");
-
-  for (int i = 0; i < 10; i++) {
+  for (int i = 0; i < (sizeof(map) / sizeof(map[0])); i++) {
     fgets(map[i], 11, mapFD);
   }
 
@@ -19,11 +24,11 @@ void setMap(char * path) {
 }
 
 void printMap() {
-  for (int i = 0; i < 10; i++) {
+  for (int i = 0; i < 11; i++) {
     printf("%s\n", map[i]);
-    for (int j = 0; j<10; j++) {
-      printf("%s", map[i][j]);
-    }
+    // for (int j = 0; j < 10; j++) {
+    //   printf("%s", map[i][j]);
+    // }
   }
 }
 
@@ -37,7 +42,7 @@ int main(int argc, char *argv[] ) {
   char* mapPath = "map.txt";
   if(argc>1){mapPath=argv[1];}
 
-  setMap(mapPath);
+  // setMap(mapPath);
   printMap();
 
   // while (1) {
