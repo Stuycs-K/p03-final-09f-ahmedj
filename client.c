@@ -1,9 +1,33 @@
 #include "networking.h"
 
-void clientLogic(int server_socket){
-  while (1) {
-    // do stuff
+char map[20][20] = {
+  {"##########"},
+  {"#        #"},
+  {"#        #"},
+  {"#  #     #"},
+  {"#  #     #"},
+  {"#  ###   #"},
+  {"#    #   #"},
+  {"#    #   #"},
+  {"#        #"},
+  {"##########"}
+};
+
+void printMap() {
+  for (int i = 0; i < (sizeof(map) / sizeof(map[0])); i++) {
+    printf("%s\n", map[i]);
   }
+}
+
+void clientLogic(int server_socket){
+
+  read(server_socket, map, sizeof(map));
+
+  printMap();
+
+  // while (1) {
+  //   // do stuff
+  // }
 }
 
 // dont touch
