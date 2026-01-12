@@ -7,7 +7,7 @@ int x = 1;
 int oy,ox;
 
 
-char map[20][20] = {
+char map[20][50] = {
   {"##########"},
   {"#        #"},
   {"#        #"},
@@ -36,7 +36,7 @@ void printMap() {
         printf("C");
       }
       else if (i == oy && j == ox) {
-        printf("S");
+        printf("D");
       }
       else {
         printf("%c", map[i][j]);
@@ -69,13 +69,19 @@ int getch() {
     if (read(STDIN_FILENO, &c, 1) == 1) return c;
     return 0;
 }
+void move(int dy, int dx) {
+  if (map[y+dy][x+dx] == ' ' || map[y+dy][x+dx] == 'D') {
+    y+=dy;
+    x+=dx;
+  }
+}
 void handleKeyboard() {
   if (kbhit()) {
     char c = getch();
-    if (c == 'w') y -= 1;
-    if (c == 's') y += 1;
-    if (c == 'a') x -= 1;
-    if (c == 'd') x += 1;
+    if (c == 'w') move(-1,0);
+    if (c == 's') move(1,0);
+    if (c == 'a') move(0,-1);
+    if (c == 'd') move(0,1);
     if (c == 27) exit(0); // ESC
   }
 }

@@ -6,7 +6,7 @@ int y = 2;
 int x = 2;
 int oy,ox;
 
-char map[20][20] = {
+char map[20][50] = {
   {"##########"},
   {"#        #"},
   {"#        #"},
@@ -50,10 +50,10 @@ void printMap() {
   for (int i = 0; i < (sizeof(map) / sizeof(map[0])); i++) {
     for (int j = 0; j < (sizeof(map[0])); j++) {
       if (i == y && j == x) {
-        printf("S");
+        printf("A");
       }
       else if (i == oy && j == ox) {
-        printf("P");
+        printf("B");
       }
       else {
         printf("%c", map[i][j]);
@@ -86,17 +86,22 @@ int getch() {
     if (read(STDIN_FILENO, &c, 1) == 1) return c;
     return 0;
 }
+void move(int dy, int dx) {
+  if (map[y+dy][x+dx] == ' ' || map[y+dy][x+dx] == 'B') {
+    y+=dy;
+    x+=dx;
+  }
+}
 void handleKeyboard() {
   if (kbhit()) {
     char c = getch();
-    if (c == 'w') y -= 1;
-    if (c == 's') y += 1;
-    if (c == 'a') x -= 1;
-    if (c == 'd') x += 1;
+    if (c == 'w') move(-1,0);
+    if (c == 's') move(1,0);
+    if (c == 'a') move(0,-1);
+    if (c == 'd') move(0,1);
     if (c == 27) exit(0); // ESC
   }
 }
-
 void serverLogic(int client_socket){
   // init
   write(client_socket, map, sizeof(map));
