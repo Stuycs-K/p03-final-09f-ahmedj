@@ -1,4 +1,10 @@
+/*server.c*/
+
 #include "networking.h"
+
+int y = 2;
+int x = 2;
+int oy,ox;
 
 char map[20][20] = {
   {"##########"},
@@ -33,15 +39,33 @@ void setMap(char * path) {
 
 void printMap() {
   for (int i = 0; i < (sizeof(map) / sizeof(map[0])); i++) {
-    printf("%s\n", map[i]);
+    for (int j = 0; j < (sizeof(map[0])); j++) {
+      if (i == y && j == x) {
+        printf("S");
+      }
+      else if (i == oy && j == ox) {
+        printf("P");
+      }
+      else {
+        printf("%c", map[i][j]);
+      }
+    }
+    printf("\n");
   }
 }
 
 void serverLogic(int client_socket){
-  // do stuff
+  // init
   write(client_socket, map, sizeof(map));
   printMap();
-  
+
+  // loop
+  while (1) {
+    write(client_socket, &y, sizeof(y));
+    write(client_socket, &x, sizeof(x));
+    read(client_socket, &oy, sizeof(oy));
+    read(client_socket, &ox, sizeof(ox));    
+  }
 }
 
 int main(int argc, char *argv[] ) {
