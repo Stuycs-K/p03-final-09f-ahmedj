@@ -6,6 +6,10 @@ int y = 2;
 int x = 2;
 int oy,ox;
 
+int mx = 5;
+int my = 5;
+int monsterFacing = 0;
+
 char map[20][50] = {
   {"##########"},
   {"#        #"},
@@ -55,6 +59,9 @@ void printMap() {
       else if (i == oy && j == ox) {
         printf("B");
       }
+      else if (i == my && j == mx) {
+        printf("M");
+      }
       else {
         printf("%c", map[i][j]);
       }
@@ -92,6 +99,46 @@ void move(int dy, int dx) {
     x+=dx;
   }
 }
+void tickMonster() {
+  switch (monsterFacing) {
+    case 0: // face right
+      if (map[my][mx + 1] == ' ') {
+        mx++;
+      }
+      // else if check player and kill
+      else {
+        monsterFacing = 1;  // turn ccw to now face up
+      }
+      break;
+    case 1: // face up
+      if (map[my-1][mx] == ' ') {
+        my--;
+      }
+      // else if check player and kill
+      else {
+        monsterFacing = 2;  // turn ccw to now face left
+      }
+      break;
+    case 2: // face left
+      if (map[my][mx - 1] == ' ') {
+        mx--;
+      }
+      // else if check player and kill
+      else {
+        monsterFacing = 3;  // turn ccw to now face down
+      }
+      break;
+    case 3: // face down
+      if (map[my+1][mx] == ' ') {
+        my++;
+      }
+      // else if check player and kill
+      else {
+        monsterFacing = 0;  // turn ccw to now face right
+      }
+      break;
+  }
+}
 void handleKeyboard() {
   if (kbhit()) {
     char c = getch();
@@ -110,6 +157,7 @@ void serverLogic(int client_socket){
   // loop
   while (1) {
     handleKeyboard();
+    tickMonster();
 
     write(client_socket, &y, sizeof(y));
     write(client_socket, &x, sizeof(x));
@@ -117,6 +165,8 @@ void serverLogic(int client_socket){
     read(client_socket, &ox, sizeof(ox));    
 
     printMap();
+
+    usleep(100000);
   }
 }
 
