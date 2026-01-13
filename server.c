@@ -8,7 +8,8 @@ int oy,ox;
 
 int mx = 5;
 int my = 5;
-int monsterFacing = 0;
+
+int health = 10;
 
 char map[20][50] = {
   {"##########"},
@@ -80,6 +81,7 @@ void enableRawMode() {
 }
 void disableRawMode() {
     tcsetattr(STDIN_FILENO, TCSANOW, &orig_term);
+    printf("\033[?1049l");
 }
 int kbhit() {
     struct timeval tv = {0L, 0L};
@@ -100,8 +102,8 @@ void move(int dy, int dx) {
   }
 }
 void tickMonster() {
-  int oldmx = mx;
-  int oldmy = my;
+  int monsterFacing = rand()%4;
+
   switch (monsterFacing) {
     case 0: // face right
       if (map[my][mx + 1] == ' ') {
@@ -123,9 +125,6 @@ void tickMonster() {
         my++;
       }
       break;
-  }
-  if (oldmx == mx && oldmy == my) {
-    monsterFacing = rand()%4;
   }
 }
 void handleKeyboard() {
@@ -150,12 +149,14 @@ void serverLogic(int client_socket){
 
     write(client_socket, &y, sizeof(y));
     write(client_socket, &x, sizeof(x));
+    write(client_socket, &my, sizeof(my));
+    write(client_socket, &mx, sizeof(mx));
     read(client_socket, &oy, sizeof(oy));
-    read(client_socket, &ox, sizeof(ox));    
+    read(client_socket, &ox, sizeof(ox));
 
     printMap();
 
-    usleep(100000);
+    // usleep(10000);
   }
 }
 
@@ -164,7 +165,7 @@ int main(int argc, char *argv[] ) {
   int listen_socket = server_setup();
   char* mapPath = "map.txt";
   if(argc>1){mapPath=argv[1]; setMap(mapPath);}
-  
+
   int client_socket = server_tcp_handshake(listen_socket);
   printf("server connected to client.\n");
   close(listen_socket);

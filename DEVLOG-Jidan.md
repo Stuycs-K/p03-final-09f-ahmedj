@@ -24,3 +24,9 @@ Researched how to take in keyboard input using termios.
 
 ### 2026-01-11 - Networking, drawing game
 Server and client now send each other their coordinates and control coordinates with WASD. There is now a game loop where keyboard input is read and the map is drawn with player locations.
+
+### 2026-01-12 - Maps
+Added new ASCII Maps to the game
+
+### 2026-01-12 - Monster
+Added a monster that moves around randomly, cannot move through walls. Tested two player functionality with another lab machine.

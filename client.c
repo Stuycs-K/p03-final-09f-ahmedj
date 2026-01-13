@@ -5,20 +5,11 @@
 int y = 1;
 int x = 1;
 int oy,ox;
+int mx, my;
 
+int health = 10;
 
-char map[20][50] = {
-  {"##########"},
-  {"#        #"},
-  {"#        #"},
-  {"#  #     #"},
-  {"#  #     #"},
-  {"#  ###   #"},
-  {"#    #   #"},
-  {"#    #   #"},
-  {"#        #"},
-  {"##########"}
-};
+char map[20][50];
 
 /* setup */
 void setup() {
@@ -38,6 +29,9 @@ void printMap() {
       else if (i == oy && j == ox) {
         printf("D");
       }
+      else if (i == my && j == mx) {
+        printf("M");
+      }
       else {
         printf("%c", map[i][j]);
       }
@@ -56,6 +50,7 @@ void enableRawMode() {
 }
 void disableRawMode() {
     tcsetattr(STDIN_FILENO, TCSANOW, &orig_term);
+    printf("\033[?1049l");
 }
 int kbhit() {
     struct timeval tv = {0L, 0L};
@@ -96,7 +91,9 @@ void clientLogic(int server_socket){
     handleKeyboard();
 
     read(server_socket, &oy, sizeof(oy));
-    read(server_socket, &ox, sizeof(ox)); 
+    read(server_socket, &ox, sizeof(ox));
+    read(server_socket, &my, sizeof(my));
+    read(server_socket, &mx, sizeof(mx));
     write(server_socket, &y, sizeof(y));
     write(server_socket, &x, sizeof(x));
 
