@@ -11,6 +11,7 @@
 #include <sys/socket.h>
 #include <netdb.h>
 #include <termios.h>
+#include <time.h>
 
 
 #ifndef NETWORKING_H

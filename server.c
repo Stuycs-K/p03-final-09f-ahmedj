@@ -100,43 +100,32 @@ void move(int dy, int dx) {
   }
 }
 void tickMonster() {
+  int oldmx = mx;
+  int oldmy = my;
   switch (monsterFacing) {
     case 0: // face right
       if (map[my][mx + 1] == ' ') {
         mx++;
-      }
-      // else if check player and kill
-      else {
-        monsterFacing = 1;  // turn ccw to now face up
       }
       break;
     case 1: // face up
       if (map[my-1][mx] == ' ') {
         my--;
       }
-      // else if check player and kill
-      else {
-        monsterFacing = 2;  // turn ccw to now face left
-      }
       break;
     case 2: // face left
       if (map[my][mx - 1] == ' ') {
         mx--;
-      }
-      // else if check player and kill
-      else {
-        monsterFacing = 3;  // turn ccw to now face down
       }
       break;
     case 3: // face down
       if (map[my+1][mx] == ' ') {
         my++;
       }
-      // else if check player and kill
-      else {
-        monsterFacing = 0;  // turn ccw to now face right
-      }
       break;
+  }
+  if (oldmx == mx && oldmy == my) {
+    monsterFacing = rand()%4;
   }
 }
 void handleKeyboard() {
@@ -171,6 +160,7 @@ void serverLogic(int client_socket){
 }
 
 int main(int argc, char *argv[] ) {
+  srand(time(NULL));
   int listen_socket = server_setup();
   char* mapPath = "map.txt";
   if(argc>1){mapPath=argv[1]; setMap(mapPath);}
