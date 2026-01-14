@@ -51,11 +51,14 @@ void setMap(char * path) {
 }
 
 void printHealth() {
-  printf("Player 1 Health : ");
+  printf("Player 1 Health : [");
   for (int i = 0; i < health; i++) {
-    printf("<3 ");
+    printf("A");
   }
-  printf("\n\n");
+  for (int i = 0; i < (10-health); i++) {
+    printf(" ");
+  }
+  printf("]\n\n");
 }
 
 void printMap() {

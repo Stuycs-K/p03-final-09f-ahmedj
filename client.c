@@ -40,11 +40,14 @@ void printMap() {
 }
 
 void printHealth() {
-  printf("Player 2 Health : ");
+  printf("Player 2 Health : [");
   for (int i = 0; i < health; i++) {
-    printf("<3 ");
+    printf("C");
   }
-  printf("\n\n");
+  for (int i = 0; i < (10-health); i++) {
+    printf(" ");
+  }
+  printf("]\n\n");
 }
 
 /* termios stuff */
