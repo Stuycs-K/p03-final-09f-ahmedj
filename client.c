@@ -8,6 +8,7 @@ int oy,ox;
 int mx, my;
 
 int health = 10;
+int ohealth;
 
 char map[20][50];
 
@@ -19,14 +20,12 @@ void setup() {
 }
 
 void printMap() {
-  printf("\033[2J");  // clear
-  printf("\033[H");   // home
   for (int i = 0; i < (sizeof(map) / sizeof(map[0])); i++) {
     for (int j = 0; j < (sizeof(map[0])); j++) {
-      if (i == y && j == x) {
+      if (i == y && j == x && health>0) {
         printf("C");
       }
-      else if (i == oy && j == ox) {
+      else if (i == oy && j == ox && ohealth>0) {
         printf("D");
       }
       else if (i == my && j == mx) {
@@ -38,6 +37,14 @@ void printMap() {
     }
     printf("\n");
   }
+}
+
+void printHealth() {
+  printf("Player 2 Health : ");
+  for (int i = 0; i < health; i++) {
+    printf("<3 ");
+  }
+  printf("\n\n");
 }
 
 /* termios stuff */
@@ -80,7 +87,11 @@ void handleKeyboard() {
     if (c == 27) exit(0); // ESC
   }
 }
-
+void handleDamage() {
+  if (mx == x && my == y && health > 0) {
+    health--;
+  }
+}
 void clientLogic(int server_socket){
   // init
   read(server_socket, map, sizeof(map));
@@ -89,14 +100,22 @@ void clientLogic(int server_socket){
   // loop
   while (1) {
     handleKeyboard();
+    handleDamage();
+
+    read(server_socket, &my, sizeof(my));
+    read(server_socket, &mx, sizeof(mx));
 
     read(server_socket, &oy, sizeof(oy));
     read(server_socket, &ox, sizeof(ox));
-    read(server_socket, &my, sizeof(my));
-    read(server_socket, &mx, sizeof(mx));
+    read(server_socket, &ohealth, sizeof(ohealth));
+
     write(server_socket, &y, sizeof(y));
     write(server_socket, &x, sizeof(x));
+    write(server_socket, &health, sizeof(health));
 
+    printf("\033[2J");  // clear
+    printf("\033[H");   // home
+    printHealth();
     printMap();
   }
 }

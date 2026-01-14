@@ -10,18 +10,19 @@ int mx = 5;
 int my = 5;
 
 int health = 10;
+int ohealth;
 
 char map[20][50] = {
-  {"##########"},
-  {"#        #"},
-  {"#        #"},
-  {"#  #     #"},
-  {"#  #     #"},
-  {"#  ###   #"},
-  {"#    #   #"},
-  {"#    #   #"},
-  {"#        #"},
-  {"##########"}
+  {"####################"},
+  {"#             #    #"},
+  {"#  ####  ######    #"},
+  {"#     #       #    #"},
+  {"#     #       #    #"},
+  {"#     #   #        #"},
+  {"#     #   #        #"},
+  {"#         #  ####  #"},
+  {"#         #        #"},
+  {"####################"}
 };
 
 char* mapPath = "map.txt";
@@ -49,15 +50,21 @@ void setMap(char * path) {
   fclose(mapFD);
 }
 
+void printHealth() {
+  printf("Player 1 Health : ");
+  for (int i = 0; i < health; i++) {
+    printf("<3 ");
+  }
+  printf("\n\n");
+}
+
 void printMap() {
-  printf("\033[2J");  // clear
-  printf("\033[H");   // home
   for (int i = 0; i < (sizeof(map) / sizeof(map[0])); i++) {
     for (int j = 0; j < (sizeof(map[0])); j++) {
-      if (i == y && j == x) {
+      if (i == y && j == x && health>0) {
         printf("A");
       }
-      else if (i == oy && j == ox) {
+      else if (i == oy && j == ox && ohealth>0) {
         printf("B");
       }
       else if (i == my && j == mx) {
@@ -137,6 +144,11 @@ void handleKeyboard() {
     if (c == 27) exit(0); // ESC
   }
 }
+void handleDamage() {
+  if (mx == x && my == y && health > 0) {
+    health--;
+  }
+}
 void serverLogic(int client_socket){
   // init
   write(client_socket, map, sizeof(map));
@@ -146,14 +158,22 @@ void serverLogic(int client_socket){
   while (1) {
     handleKeyboard();
     tickMonster();
+    handleDamage();
+
+    write(client_socket, &my, sizeof(my));
+    write(client_socket, &mx, sizeof(mx));
 
     write(client_socket, &y, sizeof(y));
     write(client_socket, &x, sizeof(x));
-    write(client_socket, &my, sizeof(my));
-    write(client_socket, &mx, sizeof(mx));
+    write(client_socket, &health, sizeof(health));
+
     read(client_socket, &oy, sizeof(oy));
     read(client_socket, &ox, sizeof(ox));
+    read(client_socket, &ohealth, sizeof(ohealth));
 
+    printf("\033[2J");  // clear
+    printf("\033[H");   // home
+    printHealth();
     printMap();
 
     // usleep(10000);
