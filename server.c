@@ -179,7 +179,7 @@ void serverLogic(int client_socket){
     printHealth();
     printMap();
 
-    // usleep(10000);
+    usleep(1000000 / 30);
   }
 }
 
