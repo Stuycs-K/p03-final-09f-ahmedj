@@ -122,9 +122,15 @@ void clientLogic(int server_socket){
     printMap();
   }
 }
+void end(int sig) {
+    disableRawMode();
+    exit(0);
+}
 
-// dont touch
+
 int main(int argc, char *argv[] ) {
+  signal(SIGINT, end);
+  signal(SIGTERM, end);
   // default server ip unless specified
   char* IP = "127.0.0.1";
   if(argc>1){IP=argv[1];}
@@ -133,5 +139,4 @@ int main(int argc, char *argv[] ) {
   printf("client connected to server.\n");
   enableRawMode();
   clientLogic(server_socket);
-  disableRawMode();
 }

@@ -12,6 +12,7 @@ int my = 5;
 int health = 10;
 int ohealth;
 
+
 char map[20][50] = {
   {"####################"},
   {"#             #    #"},
@@ -183,7 +184,16 @@ void serverLogic(int client_socket){
   }
 }
 
+void end(int sig) {
+    disableRawMode();
+    exit(0);
+}
+
+
+
 int main(int argc, char *argv[] ) {
+  signal(SIGINT, end);
+  signal(SIGTERM, end);
   srand(time(NULL));
   int listen_socket = server_setup();
   char* mapPath = "map.txt";
@@ -195,6 +205,4 @@ int main(int argc, char *argv[] ) {
   enableRawMode();
   serverLogic(client_socket);
   close(client_socket);
-  disableRawMode();
-  exit(0);
 }

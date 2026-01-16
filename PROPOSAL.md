@@ -17,13 +17,13 @@ Players can move around the map with WASD.
 
 # Technical Details:
 
-I will have 2 programs, a server that sends the map initially and host's location continually to the client over a socket. The client sends back the guest's location to the host. Both players can see each other on the map.
+I will have 2 programs, a server that sends the map initially and host's location continually to the client over a socket. The client sends back the guest's location to the host. Both players can see each other on the map. There is also a monster and player health. The monsters coordinates are sent from the server to the client. Both players send their health amounts to the other player.
 
-The map file will be 0s and 1s in a text file. It will be read by the server program and converted to a 2d array. The array will be sent to the client over the socket.
+The map file made of spaces and characters in a text file. It is read by the server program and converted to a 2d array. The array is sent to the client over the socket.
 
-The game will be viewed through ASCII in the terminal.
+The game is viewed through ASCII in the terminal.
 
-I may use ncurses or try to manipulate the terminal manually.
+The terminal is manipulated using termios to read raw keyboard inputs.
 
 I will be breaking up the project into file reading, terminal manipulation and controls, networking then optional features
 
