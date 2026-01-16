@@ -77,7 +77,7 @@ void printHealth() {
   printf("]\n\n");
 }
 void printPoints() {
-  printf("%d Points %d %d\n", points, py, px);
+  printf("%d Points\n", points);
   printf("\n");
 }
 void printMap() {
@@ -161,9 +161,11 @@ void tickMonster() {
 }
 void spawnPoint() {
   // dont spawn it on an entity or wall
-  while (map[py][px] != ' ') {
-    py = rand()%10;
-    px = rand()%10;
+  py = rand()%10;
+  px = rand()%10;
+
+  if (map[py][px] != ' ') {
+    spawnPoint();
   }
 }
 void handleKeyboard() {
@@ -182,7 +184,7 @@ void handleDamage() {
   }
 }
 void handlePoints() {
-  if (px == x && py == y && health > 0) {
+  if ((px == x && py == y && health > 0) || (px == ox && py == oy && ohealth > 0)) {
     points++;
     spawnPoint();
   }
@@ -190,8 +192,8 @@ void handlePoints() {
 void serverLogic(int client_socket){
   // init
   write(client_socket, map, sizeof(map));
-  printMap();
   spawnPoint();
+  printMap();
 
   struct Packet *out = calloc(1, sizeof(struct Packet));
   struct PacketIn *in  = calloc(1, sizeof(struct PacketIn));

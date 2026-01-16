@@ -69,6 +69,10 @@ void printHealth() {
   }
   printf("]\n\n");
 }
+void printPoints() {
+  printf("%d Points\n", points);
+  printf("\n");
+}
 
 /* termios stuff */
 struct termios orig_term;
@@ -100,13 +104,7 @@ void move(int dy, int dx) {
     x+=dx;
   }
 }
-void spawnPoint() {
-  // dont spawn it on an entity or wall
-  while (map[py][px] != ' ') {
-    py = rand()%sizeof(map);
-    py = rand()%sizeof(map[0]);
-  }
-}
+
 void handleKeyboard() {
   if (kbhit()) {
     char c = getch();
@@ -125,7 +123,6 @@ void handleDamage() {
 void handlePoints() {
   if (px == x && py == y && health > 0) {
     points++;
-    spawnPoint();
   }
 }
 void clientLogic(int server_socket){
@@ -162,6 +159,7 @@ void clientLogic(int server_socket){
     printf("\033[2J");  // clear
     printf("\033[H");   // home
     printHealth();
+    printPoints();
     printMap();
   }
   free(in);
