@@ -30,3 +30,9 @@ Added new ASCII Maps to the game
 
 ### 2026-01-12 - Monster
 Added a monster that moves around randomly, cannot move through walls. Tested two player functionality with another lab machine.
+
+### 2026-01-13 - Tweaks
+Tweaked monster movement code and let server send monster position over to client.
+
+### 2026-01-14 - Health Bars
+Both players now have health bars. Touching the monster reduces health. Each player sees own health and not the other's. If players are dead, they are no longer seen in the game.
