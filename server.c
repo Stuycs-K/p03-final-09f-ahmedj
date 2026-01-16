@@ -5,6 +5,8 @@
 int y = 2;
 int x = 2;
 int oy,ox;
+int py = 0;
+int px = 0;
 
 int mx = 5;
 int my = 5;
@@ -12,10 +14,13 @@ int my = 5;
 int health = 10;
 int ohealth;
 
+int points = 0;
+
 struct Packet {
   int my, mx;
   int y, x;
   int health;
+  int py, px;
 };
 
 struct PacketIn {
@@ -71,7 +76,10 @@ void printHealth() {
   }
   printf("]\n\n");
 }
-
+void printPoints() {
+  printf("%d Points %d %d\n", points, py, px);
+  printf("\n");
+}
 void printMap() {
   for (int i = 0; i < (sizeof(map) / sizeof(map[0])); i++) {
     for (int j = 0; j < (sizeof(map[0])); j++) {
@@ -83,6 +91,9 @@ void printMap() {
       }
       else if (i == my && j == mx) {
         printf("M");
+      }
+      else if (i == py && j == px) {
+        printf("o");
       }
       else {
         printf("%c", map[i][j]);
@@ -148,6 +159,13 @@ void tickMonster() {
       break;
   }
 }
+void spawnPoint() {
+  // dont spawn it on an entity or wall
+  while (map[py][px] != ' ') {
+    py = rand()%10;
+    px = rand()%10;
+  }
+}
 void handleKeyboard() {
   if (kbhit()) {
     char c = getch();
@@ -163,10 +181,17 @@ void handleDamage() {
     health--;
   }
 }
+void handlePoints() {
+  if (px == x && py == y && health > 0) {
+    points++;
+    spawnPoint();
+  }
+}
 void serverLogic(int client_socket){
   // init
   write(client_socket, map, sizeof(map));
   printMap();
+  spawnPoint();
 
   struct Packet *out = calloc(1, sizeof(struct Packet));
   struct PacketIn *in  = calloc(1, sizeof(struct PacketIn));
@@ -177,12 +202,15 @@ void serverLogic(int client_socket){
     handleKeyboard();
     tickMonster();
     handleDamage();
+    handlePoints();
 
     out->my = my;
     out->mx = mx;
     out->y  = y;
     out->x  = x;
     out->health = health;
+    out->py = py;
+    out->px = px;
 
     if (write(client_socket, out, sizeof(*out)) <= 0) break;
     if (read(client_socket, in, sizeof(*in)) <= 0) break;
@@ -195,6 +223,7 @@ void serverLogic(int client_socket){
     printf("\033[2J");  // clear
     printf("\033[H");   // home
     printHealth();
+    printPoints();
     printMap();
 
     usleep(1000000 / 30);

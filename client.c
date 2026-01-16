@@ -5,10 +5,14 @@
 int y = 1;
 int x = 1;
 int oy,ox;
+int px, py;
+
 int mx, my;
 
 int health = 10;
 int ohealth;
+
+int points = 0;
 
 char map[20][50];
 
@@ -21,6 +25,7 @@ struct PacketIn {
   int my, mx;
   int oy, ox;
   int ohealth;
+  int py, px;
 };
 
 
@@ -42,6 +47,9 @@ void printMap() {
       }
       else if (i == my && j == mx) {
         printf("M");
+      }
+      else if (i == py && j == px) {
+        printf("o");
       }
       else {
         printf("%c", map[i][j]);
@@ -92,6 +100,13 @@ void move(int dy, int dx) {
     x+=dx;
   }
 }
+void spawnPoint() {
+  // dont spawn it on an entity or wall
+  while (map[py][px] != ' ') {
+    py = rand()%sizeof(map);
+    py = rand()%sizeof(map[0]);
+  }
+}
 void handleKeyboard() {
   if (kbhit()) {
     char c = getch();
@@ -107,6 +122,12 @@ void handleDamage() {
     health--;
   }
 }
+void handlePoints() {
+  if (px == x && py == y && health > 0) {
+    points++;
+    spawnPoint();
+  }
+}
 void clientLogic(int server_socket){
   // init
   read(server_socket, map, sizeof(map));
@@ -120,6 +141,7 @@ void clientLogic(int server_socket){
   while (1) {
     handleKeyboard();
     handleDamage();
+    handlePoints();
 
     if (read(server_socket, in, sizeof(*in)) <= 0) break;
 
@@ -128,13 +150,14 @@ void clientLogic(int server_socket){
     oy = in->oy;
     ox = in->ox;
     ohealth = in->ohealth;
+    py = in->py;
+    px = in->px;
 
     out->y = y;
     out->x = x;
     out->health = health;
 
     if (write(server_socket, out, sizeof(*out)) <= 0) break;
-
 
     printf("\033[2J");  // clear
     printf("\033[H");   // home
