@@ -39,3 +39,6 @@ Both players now have health bars. Touching the monster reduces health. Each pla
 
 ### 2026-01-15 - Improvements
 Used signals to disable raw input mode, calloced struct Packets to send and recieve over socket.
+
+### 2026-01-15 - Points
+Added randomly spawning points players can collect while avoiding monster. Points are displayed under health.
