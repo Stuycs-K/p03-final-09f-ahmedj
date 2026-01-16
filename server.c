@@ -12,6 +12,16 @@ int my = 5;
 int health = 10;
 int ohealth;
 
+struct Packet {
+  int my, mx;
+  int y, x;
+  int health;
+};
+
+struct PacketIn {
+  int oy, ox;
+  int ohealth;
+};
 
 char map[20][50] = {
   {"####################"},
@@ -158,22 +168,29 @@ void serverLogic(int client_socket){
   write(client_socket, map, sizeof(map));
   printMap();
 
+  struct Packet *out = calloc(1, sizeof(struct Packet));
+  struct PacketIn *in  = calloc(1, sizeof(struct PacketIn));
+
+
   // loop
   while (1) {
     handleKeyboard();
     tickMonster();
     handleDamage();
 
-    write(client_socket, &my, sizeof(my));
-    write(client_socket, &mx, sizeof(mx));
+    out->my = my;
+    out->mx = mx;
+    out->y  = y;
+    out->x  = x;
+    out->health = health;
 
-    write(client_socket, &y, sizeof(y));
-    write(client_socket, &x, sizeof(x));
-    write(client_socket, &health, sizeof(health));
+    if (write(client_socket, out, sizeof(*out)) <= 0) break;
+    if (read(client_socket, in, sizeof(*in)) <= 0) break;
 
-    read(client_socket, &oy, sizeof(oy));
-    read(client_socket, &ox, sizeof(ox));
-    read(client_socket, &ohealth, sizeof(ohealth));
+    oy = in->oy;
+    ox = in->ox;
+    ohealth = in->ohealth;
+
 
     printf("\033[2J");  // clear
     printf("\033[H");   // home
@@ -182,6 +199,9 @@ void serverLogic(int client_socket){
 
     usleep(1000000 / 30);
   }
+
+  free(out);
+  free(in);
 }
 
 void end(int sig) {

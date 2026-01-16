@@ -37,6 +37,5 @@ Tweaked monster movement code and let server send monster position over to clien
 ### 2026-01-14 - Health Bars
 Both players now have health bars. Touching the monster reduces health. Each player sees own health and not the other's. If players are dead, they are no longer seen in the game.
 
-
 ### 2026-01-15 - Improvements
-Used signals to disable raw input mode, 
+Used signals to disable raw input mode, calloced struct Packets to send and recieve over socket.

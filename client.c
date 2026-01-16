@@ -12,6 +12,18 @@ int ohealth;
 
 char map[20][50];
 
+struct PacketOut {
+  int y, x;
+  int health;
+};
+
+struct PacketIn {
+  int my, mx;
+  int oy, ox;
+  int ohealth;
+};
+
+
 /* setup */
 void setup() {
   printf("\033[48;5;0m");     // background black
@@ -100,27 +112,37 @@ void clientLogic(int server_socket){
   read(server_socket, map, sizeof(map));
   printMap();
 
+  struct PacketIn  *in  = calloc(1, sizeof(struct PacketIn));
+  struct PacketOut *out = calloc(1, sizeof(struct PacketOut));
+
+
   // loop
   while (1) {
     handleKeyboard();
     handleDamage();
 
-    read(server_socket, &my, sizeof(my));
-    read(server_socket, &mx, sizeof(mx));
+    if (read(server_socket, in, sizeof(*in)) <= 0) break;
 
-    read(server_socket, &oy, sizeof(oy));
-    read(server_socket, &ox, sizeof(ox));
-    read(server_socket, &ohealth, sizeof(ohealth));
+    my = in->my;
+    mx = in->mx;
+    oy = in->oy;
+    ox = in->ox;
+    ohealth = in->ohealth;
 
-    write(server_socket, &y, sizeof(y));
-    write(server_socket, &x, sizeof(x));
-    write(server_socket, &health, sizeof(health));
+    out->y = y;
+    out->x = x;
+    out->health = health;
+
+    if (write(server_socket, out, sizeof(*out)) <= 0) break;
+
 
     printf("\033[2J");  // clear
     printf("\033[H");   // home
     printHealth();
     printMap();
   }
+  free(in);
+  free(out);
 }
 void end(int sig) {
     disableRawMode();
